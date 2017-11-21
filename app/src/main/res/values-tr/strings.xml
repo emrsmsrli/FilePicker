@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="up">[Yukarı]</string>
+    <string name="no_subdirectories">Burada hiç klasör ya da dosya yok</string>
+    <string name="select_file">Aktarmak için dosya seç</string>
+    <string name="select_folder">Aktarmak için klasör seç</string>
+    <string name="folder_name_empty">Klasör adı boş olamaz</string>
+    <string name="new_folder">Yeni klasör</string>
+</resources>

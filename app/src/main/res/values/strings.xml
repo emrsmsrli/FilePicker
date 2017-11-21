@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name" translatable="false">File Picker</string>
+
+    <string name="no_subdirectories">No folders or files here</string>
+
+    <string name="select_file">Select a file to import</string>
+    <string name="select_folder">Select a folder to export</string>
+    <string name="folder_name_empty">Folder name cannot be empty</string>
+
+    <string name="up">[Up]</string>
+    <string name="new_folder">New Folder</string>
+</resources>

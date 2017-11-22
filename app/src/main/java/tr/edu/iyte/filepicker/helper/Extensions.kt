@@ -5,6 +5,8 @@ import android.support.annotation.IdRes
 import android.view.View
 import android.util.Log
 import android.widget.Toast
+import tr.edu.iyte.filepicker.FilePicker
+import tr.edu.iyte.filepicker.FilePickerMode
 
 interface Loggable {
     val tag: String
@@ -34,3 +36,7 @@ fun Loggable.verbose(message: Any) {
 
 inline fun <reified T : View> View.find(@IdRes id: Int): T = findViewById(id)
 fun Context.toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+
+fun Context.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
+                       onFileSelectedListener: (String) -> Unit)
+    = FilePicker(this, mode, onFileSelectedListener).show()

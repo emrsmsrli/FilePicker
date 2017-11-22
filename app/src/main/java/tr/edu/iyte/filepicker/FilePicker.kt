@@ -73,7 +73,7 @@ class FilePicker(private val context: Context,
                     pickerAdapter.addAll(storages, includeUp = false)
                     toggleVisibility(newFolderButton, shouldBeVisible = false)
                     if(mode == FilePickerMode.FOLDER_PICK)
-                        toggleVisibility(okButton, shouldBeVisible = false)
+                        toggleEnable(okButton, shouldEnable = false)
                 } else {
                     pickerAdapter.addAll(getChildrenFiles(file = File(path)), includeUp = true)
                 }
@@ -91,7 +91,7 @@ class FilePicker(private val context: Context,
             if(stack.isEmpty()) {
                 toggleVisibility(newFolderButton, shouldBeVisible = true)
                 if(mode == FilePickerMode.FOLDER_PICK)
-                    toggleVisibility(okButton, shouldBeVisible = true)
+                    toggleEnable(okButton, shouldEnable = true)
             }
 
             stack.push(path)
@@ -121,8 +121,8 @@ class FilePicker(private val context: Context,
                     val titleView = inflater.inflate(R.layout.file_picker_custom_dialog_title, null)
                     titleView.find<TextView>(R.id.title).text =
                             when(mode) {
-                                FilePickerMode.FOLDER_PICK -> context.getString(R.string.file_picker_select_file)
-                                FilePickerMode.FILE_PICK   -> context.getString(R.string.file_picker_select_folder)
+                                FilePickerMode.FILE_PICK -> context.getString(R.string.file_picker_select_file)
+                                FilePickerMode.FOLDER_PICK   -> context.getString(R.string.file_picker_select_folder)
                             }
                     subTitle = titleView.find(R.id.subtitle)
                     subTitle.text = path
@@ -241,13 +241,17 @@ class FilePicker(private val context: Context,
                     alpha(NO_ALPHA)
                     setListener(object : AnimatorListenerAdapter() {
                         override fun onAnimationEnd(animation: Animator?) {
-                            v.visibility = View.INVISIBLE
+                            v.visibility = View.GONE
                             super.onAnimationEnd(animation)
                         }
                     })
                 }
                 start()
             }
+        }
+
+        fun toggleEnable(b: Button, shouldEnable: Boolean) {
+            b.isEnabled = shouldEnable
         }
     }
 }

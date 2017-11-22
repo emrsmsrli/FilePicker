@@ -10,9 +10,9 @@ import android.widget.TextView
 import tr.edu.iyte.filepicker.helper.find
 import tr.edu.iyte.filepicker.item.*
 
-internal class FilePickerAdapter(private val ctx: Context,
-                        private val notifyOnChange: Boolean = true,
-                        private val onItemClick: (FileItem) -> Unit) :
+internal class FilePickerAdapter(private val context: Context,
+                                 private val notifyOnChange: Boolean = true,
+                                 private val onItemClick: (FileItem) -> Unit) :
         RecyclerView.Adapter<FilePickerAdapter.ViewHolder>() {
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val img = v.find<ImageView>(R.id.icon)
@@ -20,8 +20,8 @@ internal class FilePickerAdapter(private val ctx: Context,
     }
 
     private val files = mutableListOf<FileItem>()
-    private val up = UpFileItem(ctx.getString(R.string.file_picker_folder_up))
-    private val inflater = LayoutInflater.from(ctx)
+    private val up = UpFileItem(context.getString(R.string.file_picker_folder_up))
+    private val inflater = LayoutInflater.from(context)
     private val lock = Any()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int)
@@ -29,7 +29,7 @@ internal class FilePickerAdapter(private val ctx: Context,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = files[position]
-        holder.img.setImageDrawable(ctx.getDrawable(
+        holder.img.setImageDrawable(context.getDrawable(
                 when {
                     item is UpFileItem      -> R.drawable.file_picker_ic_folder_up_black_24dp
                     item is StorageFileItem -> R.drawable.file_picker_ic_sd_storage_black_24dp

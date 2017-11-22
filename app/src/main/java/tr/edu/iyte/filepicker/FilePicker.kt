@@ -29,7 +29,7 @@ import java.util.*
  * @param mode Mode for the picker to select files or folders
  * @param onFileSelectedListener A listener object for item click events
  */
-class FilePicker(ctx: Context,
+class FilePicker(private val context: Context,
                  private val mode: FilePickerMode = FilePickerMode.FOLDER_PICK,
                  private val onFileSelectedListener: (String) -> Unit) : Loggable {
     private val stack = Stack<String>()
@@ -43,12 +43,12 @@ class FilePicker(ctx: Context,
 
     init {
         val reg = "/Android".toRegex()
-        storages = ctx.externalCacheDirs.map {
+        storages = context.externalCacheDirs.map {
             val storageFile = File(it.path.split(reg)[0])
 
             val name = if(Environment.isExternalStorageRemovable(storageFile))
-                ctx.getString(R.string.file_picker_internal_storage)
-            else ctx.getString(R.string.file_picker_external_storage)
+                context.getString(R.string.file_picker_internal_storage)
+            else context.getString(R.string.file_picker_external_storage)
 
             StorageFileItem(name = name, path = storageFile.path)
         }.sortedBy { it.name }
@@ -58,10 +58,9 @@ class FilePicker(ctx: Context,
      * Shows the FilePicker with the given [context].
      * Picker starts with showing all available
      * storage devices.
-     * @param context A context for loading string and icon resources
      */
     @SuppressLint("InflateParams")
-    fun show(context: Context) {
+    fun show() {
         pickerAdapter = FilePickerAdapter(context) onItemClick@{ file ->
             if(file is UpFileItem) {
                 path = stack.pop()
@@ -97,7 +96,7 @@ class FilePicker(ctx: Context,
 
             stack.push(path)
 
-            if(stack.size == 1 && file is StorageFileItem)  // this means we go in one of the storages
+            if(stack.size == 1 && file is StorageFileItem) // this means we go in one of the storages
                 path = file.path
             else
                 path += "${File.separator}${file.name}"

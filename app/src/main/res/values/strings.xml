@@ -3,8 +3,8 @@
 
     <string name="file_picker_no_subdirectories">No folders or files here</string>
 
-    <string name="file_picker_select_file">Select a file to import</string>
-    <string name="file_picker_select_folder">Select a folder to export</string>
+    <string name="file_picker_select_file">Select a file</string>
+    <string name="file_picker_select_folder">Select a folder</string>
     <string name="file_picker_folder_name_empty">Folder name cannot be empty</string>
 
     <string name="file_picker_folder_up">[Up]</string>

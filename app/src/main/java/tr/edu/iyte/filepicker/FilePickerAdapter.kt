@@ -20,21 +20,21 @@ internal class FilePickerAdapter(private val ctx: Context,
     }
 
     private val files = mutableListOf<FileItem>()
-    private val up = UpFileItem(ctx.getString(R.string.up))
+    private val up = UpFileItem(ctx.getString(R.string.file_picker_folder_up))
     private val inflater = LayoutInflater.from(ctx)
     private val lock = Any()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int)
-            = ViewHolder(inflater.inflate(R.layout.list_item_file, parent, false))
+            = ViewHolder(inflater.inflate(R.layout.file_picker_list_item_file, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = files[position]
         holder.img.setImageDrawable(ctx.getDrawable(
                 when {
-                    item is UpFileItem      -> R.drawable.ic_folder_up_black_24dp
-                    item is StorageFileItem -> R.drawable.ic_sd_storage_black_24dp
-                    item.isDirectory        -> R.drawable.ic_folder_black_24dp
-                    else                    -> R.drawable.ic_file_black_24dp
+                    item is UpFileItem      -> R.drawable.file_picker_ic_folder_up_black_24dp
+                    item is StorageFileItem -> R.drawable.file_picker_ic_sd_storage_black_24dp
+                    item.isDirectory        -> R.drawable.file_picker_ic_folder_black_24dp
+                    else                    -> R.drawable.file_picker_ic_file_black_24dp
                 }))
 
         holder.fileName.text = item.name

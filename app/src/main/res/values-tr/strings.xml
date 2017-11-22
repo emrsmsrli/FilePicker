@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="up">[Yukarı]</string>
-    <string name="no_subdirectories">Burada hiç klasör ya da dosya yok</string>
-    <string name="select_file">Aktarmak için dosya seç</string>
-    <string name="select_folder">Aktarmak için klasör seç</string>
-    <string name="folder_name_empty">Klasör adı boş olamaz</string>
-    <string name="new_folder">Yeni klasör</string>
-    <string name="internal_storage">Dahili depolama</string>
-    <string name="external_storage">SD Kart</string>
+    <string name="file_picker_folder_up">[Yukarı]</string>
+    <string name="file_picker_no_subdirectories">Burada hiç klasör ya da dosya yok</string>
+    <string name="file_picker_select_file">Aktarmak için dosya seç</string>
+    <string name="file_picker_select_folder">Aktarmak için klasör seç</string>
+    <string name="file_picker_folder_name_empty">Klasör adı boş olamaz</string>
+    <string name="file_picker_folder_new">Yeni klasör</string>
+    <string name="file_picker_internal_storage">Dahili depolama</string>
+    <string name="file_picker_external_storage">SD Kart</string>
 </resources>

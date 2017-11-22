@@ -1,11 +1,7 @@
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="file_picker_AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="file_picker_colorPrimary">@color/colorPrimary</item>
+        <item name="file_picker_colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="file_picker_colorAccent">@color/colorAccent</item>
     </style>
-
 </resources>

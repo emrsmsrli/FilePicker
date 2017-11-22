@@ -47,8 +47,8 @@ class FilePicker(ctx: Context,
             val storageFile = File(it.path.split(reg)[0])
 
             val name = if(Environment.isExternalStorageRemovable(storageFile))
-                ctx.getString(R.string.internal_storage)
-            else ctx.getString(R.string.external_storage)
+                ctx.getString(R.string.file_picker_internal_storage)
+            else ctx.getString(R.string.file_picker_external_storage)
 
             StorageFileItem(name = name, path = storageFile.path)
         }.sortedBy { it.name }
@@ -109,33 +109,33 @@ class FilePicker(ctx: Context,
             pickerAdapter.clear()
             val children = getChildrenFiles(file = dir)
             if(children.isEmpty()) {
-                context.toast(context.getString(R.string.no_subdirectories))
+                context.toast(context.getString(R.string.file_picker_no_subdirectories))
             }
 
             pickerAdapter.addAll(children, includeUp = true)
         }
 
         dialog = AlertDialog.Builder(context)
-                .setNeutralButton(R.string.new_folder, null)
+                .setNeutralButton(R.string.file_picker_folder_new, null)
                 .also {
                     val inflater = LayoutInflater.from(context)
-                    val titleView = inflater.inflate(R.layout.custom_dialog_title, null)
+                    val titleView = inflater.inflate(R.layout.file_picker_custom_dialog_title, null)
                     titleView.find<TextView>(R.id.title).text =
                             when(mode) {
-                                FilePickerMode.FOLDER_PICK -> context.getString(R.string.select_file)
-                                FilePickerMode.FILE_PICK   -> context.getString(R.string.select_folder)
+                                FilePickerMode.FOLDER_PICK -> context.getString(R.string.file_picker_select_file)
+                                FilePickerMode.FILE_PICK   -> context.getString(R.string.file_picker_select_folder)
                             }
                     subTitle = titleView.find(R.id.subtitle)
                     subTitle.text = path
 
                     it.setCustomTitle(titleView)
 
-                    val customView = inflater.inflate(R.layout.custom_dialog_view, null)
+                    val customView = inflater.inflate(R.layout.file_picker_custom_dialog_view, null)
                     val recycler = customView.find<RecyclerView>(R.id.recycler)
                     recycler.layoutManager = LinearLayoutManager(context)
                     recycler.adapter = pickerAdapter
                     val decoration = DividerItemDecoration(context, LinearLayout.VERTICAL)
-                    decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.line_divider))
+                    decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.file_picker_line_divider))
                     recycler.addItemDecoration(decoration)
                     it.setView(customView)
 
@@ -191,7 +191,7 @@ class FilePicker(ctx: Context,
         private val layout: TextInputLayout
                 = LayoutInflater
                     .from(context)
-                    .inflate(R.layout.text_input, null) as TextInputLayout
+                    .inflate(R.layout.file_picker_text_input, null) as TextInputLayout
         private val textField: TextInputEditText = layout.find(R.id.reply_text)
 
         init {
@@ -211,7 +211,7 @@ class FilePicker(ctx: Context,
             }
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 if(textField.text.isBlank())
-                    layout.error = context.getString(R.string.folder_name_empty)
+                    layout.error = context.getString(R.string.file_picker_folder_name_empty)
                 else {
                     val fName = textField.text.toString()
                     File("$path${File.separator}$fName").mkdir()

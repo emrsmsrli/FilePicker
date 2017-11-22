@@ -31,7 +31,7 @@ internal class FilePickerAdapter(private val ctx: Context,
         val item = files[position]
         holder.img.setImageDrawable(ctx.getDrawable(
                 when {
-                    item is UpFileItem      -> R.drawable.ic_folder_upload_24dp
+                    item is UpFileItem      -> R.drawable.ic_folder_up_black_24dp
                     item is StorageFileItem -> R.drawable.ic_sd_storage_black_24dp
                     item.isDirectory        -> R.drawable.ic_folder_black_24dp
                     else                    -> R.drawable.ic_file_black_24dp

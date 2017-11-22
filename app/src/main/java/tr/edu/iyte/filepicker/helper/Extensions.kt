@@ -1,5 +1,7 @@
 package tr.edu.iyte.filepicker.helper
 
+import android.app.Fragment as F
+import android.support.v4.app.Fragment as Fv4
 import android.content.Context
 import android.support.annotation.IdRes
 import android.view.View
@@ -43,7 +45,35 @@ internal fun Context.toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH
  * @param onFileSelectedListener A listener object for item click events
  * @see FilePickerMode.FILE_PICK
  * @see FilePickerMode.FOLDER_PICK
+ * @see F.filePicker
+ * @see Fv4.filePicker
  */
 fun Context.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
                        onFileSelectedListener: (String) -> Unit)
-    = FilePicker(this, mode, onFileSelectedListener).show()
+        = FilePicker(this, mode, onFileSelectedListener).show()
+
+/**
+ * Convenience method for easily creating and showing a [FilePicker].
+ * @param mode Mode for the picker to select files or folders. One of [FilePickerMode]s is applicable
+ * @param onFileSelectedListener A listener object for item click events
+ * @see FilePickerMode.FILE_PICK
+ * @see FilePickerMode.FOLDER_PICK
+ * @see Context.filePicker
+ * @see Fv4.filePicker
+ */
+fun F.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
+                        onFileSelectedListener: (String) -> Unit)
+        = FilePicker(activity, mode, onFileSelectedListener).show()
+
+/**
+ * Convenience method for easily creating and showing a [FilePicker].
+ * @param mode Mode for the picker to select files or folders. One of [FilePickerMode]s is applicable
+ * @param onFileSelectedListener A listener object for item click events
+ * @see FilePickerMode.FILE_PICK
+ * @see FilePickerMode.FOLDER_PICK
+ * @see F.filePicker
+ * @see Context.filePicker
+ */
+fun Fv4.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
+                   onFileSelectedListener: (String) -> Unit)
+        = FilePicker(activity, mode, onFileSelectedListener).show()

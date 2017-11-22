@@ -1,6 +1,28 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.jetbrains.dokka'
+
+ext {
+    publishedGroupId = 'tr.edu.iyte.file-picker'
+    libraryName = 'FilePicker'
+    artifact = 'file-picker'
+
+    libraryDescription = 'A custom Android AlertDialog to select files and folders'
+
+    siteUrl = 'https://github.com/emrsmsrli/FilePicker'
+    gitUrl = 'https://github.com/emrsmsrli/FilePicker.git'
+
+    libraryVersion = '1.0.2'
+
+    developerId = 'emrsmsrli'
+    developerName = 'Emre Simsirli'
+    developerEmail = 'emrsmsrli1@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 
 android {
     compileSdkVersion 26
@@ -19,6 +41,11 @@ android {
     }
 }
 
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
@@ -30,3 +57,6 @@ dependencies {
     implementation "com.android.support:design:$support_version"
     implementation "com.android.support:recyclerview-v7:$support_version"
 }
+
+apply from: 'bintray/installv1.gradle'
+apply from: 'bintray/bintrayv1.gradle'

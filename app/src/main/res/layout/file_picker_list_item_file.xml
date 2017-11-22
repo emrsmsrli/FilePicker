@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:tint="@color/colorPrimary"
+        android:tint="@color/file_picker_colorPrimary"
         android:src="@drawable/file_picker_ic_file_black_24dp"
         android:layout_marginStart="16dp"
         android:layout_centerVertical="true"

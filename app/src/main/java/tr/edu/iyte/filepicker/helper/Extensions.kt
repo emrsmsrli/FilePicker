@@ -37,6 +37,13 @@ internal fun Loggable.verbose(message: Any) {
 internal inline fun <reified T : View> View.find(@IdRes id: Int): T = findViewById(id)
 internal fun Context.toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
+/**
+ * Convenience method for easily creating and showing a [FilePicker].
+ * @param mode Mode for the picker to select files or folders. One of [FilePickerMode]s is applicable
+ * @param onFileSelectedListener A listener object for item click events
+ * @see FilePickerMode.FILE_PICK
+ * @see FilePickerMode.FOLDER_PICK
+ */
 fun Context.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
                        onFileSelectedListener: (String) -> Unit)
     = FilePicker(this, mode, onFileSelectedListener).show()

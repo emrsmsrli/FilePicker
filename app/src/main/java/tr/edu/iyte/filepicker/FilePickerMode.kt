@@ -2,8 +2,8 @@ package tr.edu.iyte.filepicker
 
 /**
  * Enumeration for changing the mode of a FilePicker.
- * @see [FOLDER_PICK]
- * @see [FILE_PICK]
+ * @see FOLDER_PICK
+ * @see FILE_PICK
  */
 enum class FilePickerMode {
     /**

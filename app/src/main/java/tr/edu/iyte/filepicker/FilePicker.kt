@@ -30,7 +30,7 @@ import java.util.*
  * @param onFileSelectedListener A listener object for item click events
  */
 class FilePicker(private val context: Context,
-                 private val mode: FilePickerMode = FilePickerMode.FOLDER_PICK,
+                 private val mode: FilePickerMode = FilePickerMode.FILE_PICK,
                  private val onFileSelectedListener: (String) -> Unit) : Loggable {
     private val stack = Stack<String>()
     private var path = "root"

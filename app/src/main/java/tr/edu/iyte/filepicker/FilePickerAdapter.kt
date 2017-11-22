@@ -10,7 +10,7 @@ import android.widget.TextView
 import tr.edu.iyte.filepicker.helper.find
 import tr.edu.iyte.filepicker.item.*
 
-class FilePickerAdapter(private val ctx: Context,
+internal class FilePickerAdapter(private val ctx: Context,
                         private val notifyOnChange: Boolean = true,
                         private val onItemClick: (FileItem) -> Unit) :
         RecyclerView.Adapter<FilePickerAdapter.ViewHolder>() {
@@ -31,9 +31,10 @@ class FilePickerAdapter(private val ctx: Context,
         val item = files[position]
         holder.img.setImageDrawable(ctx.getDrawable(
                 when {
-                    item is UpFileItem -> R.drawable.ic_folder_upload_24dp
-                    item.isDirectory   -> R.drawable.ic_folder_black_24dp
-                    else               -> R.drawable.ic_file_black_24dp
+                    item is UpFileItem      -> R.drawable.ic_folder_upload_24dp
+                    item is StorageFileItem -> R.drawable.ic_sd_storage_black_24dp
+                    item.isDirectory        -> R.drawable.ic_folder_black_24dp
+                    else                    -> R.drawable.ic_file_black_24dp
                 }))
 
         holder.fileName.text = item.name

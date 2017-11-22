@@ -9,4 +9,7 @@
 
     <string name="up">[Up]</string>
     <string name="new_folder">New Folder</string>
+
+    <string name="internal_storage">Internal Storage</string>
+    <string name="external_storage">SD Card</string>
 </resources>

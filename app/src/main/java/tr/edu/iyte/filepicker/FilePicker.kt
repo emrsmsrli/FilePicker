@@ -1,5 +1,7 @@
 package tr.edu.iyte.filepicker
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Environment
@@ -13,6 +15,7 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -26,14 +29,30 @@ import java.util.*
  * @param mode Mode for the picker to select files or folders
  * @param onFileSelectedListener A listener object for item click events
  */
-class FilePicker(private val mode: FilePickerMode = FilePickerMode.FOLDER_PICK,
+class FilePicker(ctx: Context,
+                 private val mode: FilePickerMode = FilePickerMode.FOLDER_PICK,
                  private val onFileSelectedListener: (String) -> Unit) : Loggable {
     private val stack = Stack<String>()
-    private var path = ""
+    private var path = "root"
+    private val storages: List<StorageFileItem>
     private lateinit var dialog: AlertDialog
     private lateinit var subTitle: TextView
-    private lateinit var upButton: Button
+    private lateinit var newFolderButton: Button
+    private lateinit var okButton: Button
     private lateinit var pickerAdapter: FilePickerAdapter
+
+    init {
+        val reg = "/Android".toRegex()
+        storages = ctx.externalCacheDirs.map {
+            val storageFile = File(it.path.split(reg)[0])
+
+            val name = if(Environment.isExternalStorageRemovable(storageFile))
+                ctx.getString(R.string.internal_storage)
+            else ctx.getString(R.string.external_storage)
+
+            StorageFileItem(name = name, path = storageFile.path)
+        }.sortedBy { it.name }
+    }
 
     /**
      * Shows the FilePicker with the given [context].
@@ -43,21 +62,21 @@ class FilePicker(private val mode: FilePickerMode = FilePickerMode.FOLDER_PICK,
      */
     @SuppressLint("InflateParams")
     fun show(context: Context) {
-        val extDirectory = Environment.getExternalStorageDirectory()
-        path = extDirectory.absolutePath
         pickerAdapter = FilePickerAdapter(context) onItemClick@{ file ->
             if(file is UpFileItem) {
                 path = stack.pop()
                 info("up, now in $path")
 
-                val upDir = File(path)
                 subTitle.text = path
 
                 pickerAdapter.clear()
                 if(stack.isEmpty()) {
-                    pickerAdapter.addAll(getChildrenFiles(file = upDir), includeUp = false)
+                    pickerAdapter.addAll(storages, includeUp = false)
+                    toggleVisibility(newFolderButton, shouldBeVisible = false)
+                    if(mode == FilePickerMode.FOLDER_PICK)
+                        toggleVisibility(okButton, shouldBeVisible = false)
                 } else {
-                    pickerAdapter.addAll(getChildrenFiles(file = upDir), includeUp = true)
+                    pickerAdapter.addAll(getChildrenFiles(file = File(path)), includeUp = true)
                 }
 
                 return@onItemClick
@@ -70,9 +89,18 @@ class FilePicker(private val mode: FilePickerMode = FilePickerMode.FOLDER_PICK,
                 return@onItemClick
             }
 
+            if(stack.isEmpty()) {
+                toggleVisibility(newFolderButton, shouldBeVisible = true)
+                if(mode == FilePickerMode.FOLDER_PICK)
+                    toggleVisibility(okButton, shouldBeVisible = true)
+            }
+
             stack.push(path)
 
-            path += "${File.separator}${file.name}"
+            if(stack.size == 1 && file is StorageFileItem)  // this means we go in one of the storages
+                path = file.path
+            else
+                path += "${File.separator}${file.name}"
             info("down, now in $path")
 
             val dir = File(path)
@@ -127,11 +155,12 @@ class FilePicker(private val mode: FilePickerMode = FilePickerMode.FOLDER_PICK,
                         }
                     }
                 }.show()
-        pickerAdapter.addAll(getChildrenFiles(extDirectory))
+        pickerAdapter.addAll(storages)
 
-        upButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
-        upButton.setOnClickListener {
-            NewFolderDialog().show(context)
+        okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        newFolderButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+        newFolderButton.setOnClickListener {
+            NewFolderDialog(context)
         }
 
         verbose("dialog init complete")
@@ -157,17 +186,18 @@ class FilePicker(private val mode: FilePickerMode = FilePickerMode.FOLDER_PICK,
         }
     }
 
-    private inner class NewFolderDialog {
-        private lateinit var layout: TextInputLayout
-        private lateinit var textField: TextInputEditText
+    @SuppressLint("InflateParams")
+    private inner class NewFolderDialog(context: Context) {
+        private val layout: TextInputLayout
+                = LayoutInflater
+                    .from(context)
+                    .inflate(R.layout.text_input, null) as TextInputLayout
+        private val textField: TextInputEditText = layout.find(R.id.reply_text)
 
-        @SuppressLint("InflateParams")
-        fun show(context: Context) {
+        init {
             val dialog = with(AlertDialog.Builder(context)) {
                 setPositiveButton(android.R.string.ok, null)
                 setNegativeButton(android.R.string.cancel) { di, _ -> di.dismiss() }
-                layout = LayoutInflater.from(context).inflate(R.layout.text_input, null) as TextInputLayout
-                textField = layout.find(R.id.reply_text)
                 textField.addTextChangedListener(object : TextWatcher {
                     override fun afterTextChanged(s: Editable?) {}
                     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -188,6 +218,36 @@ class FilePicker(private val mode: FilePickerMode = FilePickerMode.FOLDER_PICK,
                     pickerAdapter.newFolder(fName)
                     dialog.dismiss()
                 }
+            }
+        }
+    }
+
+    internal companion object {
+        private const val ANIM_TIME = 200L
+        private const val FULL_ALPHA = 1f
+        private const val NO_ALPHA = 0f
+
+        fun toggleVisibility(v: View, shouldBeVisible: Boolean) {
+            with(v.animate()) {
+                duration = ANIM_TIME
+                if(shouldBeVisible) {
+                    alpha(FULL_ALPHA)
+                    setListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationStart(animation: Animator?) {
+                            super.onAnimationStart(animation)
+                            v.visibility = View.VISIBLE
+                        }
+                    })
+                } else {
+                    alpha(NO_ALPHA)
+                    setListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator?) {
+                            v.visibility = View.INVISIBLE
+                            super.onAnimationEnd(animation)
+                        }
+                    })
+                }
+                start()
             }
         }
     }

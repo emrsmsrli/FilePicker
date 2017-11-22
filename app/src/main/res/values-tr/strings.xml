@@ -6,4 +6,6 @@
     <string name="select_folder">Aktarmak için klasör seç</string>
     <string name="folder_name_empty">Klasör adı boş olamaz</string>
     <string name="new_folder">Yeni klasör</string>
+    <string name="internal_storage">Dahili depolama</string>
+    <string name="external_storage">SD Kart</string>
 </resources>

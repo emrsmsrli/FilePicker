@@ -8,7 +8,7 @@ import android.widget.Toast
 import tr.edu.iyte.filepicker.FilePicker
 import tr.edu.iyte.filepicker.FilePickerMode
 
-interface Loggable {
+internal interface Loggable {
     val tag: String
         get() = getTag(javaClass)
 }
@@ -22,20 +22,20 @@ private fun getTag(clazz: Class<*>): String {
     }
 }
 
-fun Loggable.info(message: Any) {
+internal fun Loggable.info(message: Any) {
     if (Log.isLoggable(tag, Log.INFO)) {
         Log.i(tag, message.toString())
     }
 }
 
-fun Loggable.verbose(message: Any) {
+internal fun Loggable.verbose(message: Any) {
     if (Log.isLoggable(tag, Log.VERBOSE)) {
         Log.v(tag, message.toString())
     }
 }
 
-inline fun <reified T : View> View.find(@IdRes id: Int): T = findViewById(id)
-fun Context.toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+internal inline fun <reified T : View> View.find(@IdRes id: Int): T = findViewById(id)
+internal fun Context.toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
 fun Context.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
                        onFileSelectedListener: (String) -> Unit)

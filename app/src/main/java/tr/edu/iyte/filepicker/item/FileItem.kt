@@ -3,7 +3,7 @@ package tr.edu.iyte.filepicker.item
 /**
  * FileItem interface that represents all available list items in the picker.
  */
-interface FileItem {
+internal interface FileItem {
     /**
      * Name of the item
      */

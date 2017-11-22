@@ -5,5 +5,5 @@ package tr.edu.iyte.filepicker.item
  * @param name Name of the file (or folder)
  * @param isDirectory Flag for whether this is a directory or a file
  */
-data class StandartFileItem(override val name: String,
-                            override val isDirectory: Boolean = false) : FileItem
+internal data class StandartFileItem(override val name: String,
+                                     override val isDirectory: Boolean = false) : FileItem

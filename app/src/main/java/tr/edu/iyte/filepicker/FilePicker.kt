@@ -157,6 +157,9 @@ class FilePicker(private val context: Context,
         pickerAdapter.addAll(storages)
 
         okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        if(mode == FilePickerMode.FOLDER_PICK)
+            toggleEnable(okButton, shouldEnable = false)
+
         newFolderButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
         newFolderButton.setOnClickListener {
             NewFolderDialog(context)

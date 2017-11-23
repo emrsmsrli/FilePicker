@@ -14,9 +14,13 @@ internal class FilePickerAdapter(private val context: Context,
                                  private val notifyOnChange: Boolean = true,
                                  private val onItemClick: (FileItem) -> Unit) :
         RecyclerView.Adapter<FilePickerAdapter.ViewHolder>() {
-    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    open inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val img = v.find<ImageView>(R.id.icon)
         val fileName = v.find<TextView>(R.id.name)
+    }
+
+    inner class ViewHolderS(v: View) : ViewHolder(v) {
+        val path = v.find<TextView>(R.id.path)
     }
 
     private val files = mutableListOf<FileItem>()
@@ -24,11 +28,19 @@ internal class FilePickerAdapter(private val context: Context,
     private val inflater = LayoutInflater.from(context)
     private val lock = Any()
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int)
-            = ViewHolder(inflater.inflate(R.layout.file_picker_list_item_file, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) = when(viewType) {
+        R.layout.file_picker_list_item_storage ->
+            ViewHolderS(inflater.inflate(R.layout.file_picker_list_item_storage, parent, false))
+        else                                   ->
+            ViewHolder(inflater.inflate(R.layout.file_picker_list_item_file, parent, false))
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = files[position]
+        if(holder is ViewHolderS) {
+            holder.path.text = (item as StorageFileItem).path
+        }
+
         holder.img.setImageDrawable(context.getDrawable(
                 when {
                     item is UpFileItem      -> R.drawable.file_picker_ic_folder_up_black_24dp
@@ -63,6 +75,11 @@ internal class FilePickerAdapter(private val context: Context,
         val size = files.size
         synchronized(lock) { files.clear() }
         if(notifyOnChange) notifyItemRangeRemoved(0, size)
+    }
+
+    override fun getItemViewType(position: Int) = when(files[position]) {
+        is StorageFileItem -> R.layout.file_picker_list_item_storage
+        else -> R.layout.file_picker_list_item_file
     }
 
     override fun getItemId(position: Int) = position.toLong()

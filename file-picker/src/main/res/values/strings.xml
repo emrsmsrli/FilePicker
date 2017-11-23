@@ -8,6 +8,6 @@
     <string name="file_picker_folder_up">[Up]</string>
     <string name="file_picker_folder_new">New Folder</string>
 
-    <string name="file_picker_internal_storage">Internal Storage</string>
+    <string name="file_picker_internal_storage">Device Storage</string>
     <string name="file_picker_external_storage">SD Card</string>
 </resources>

@@ -5,6 +5,7 @@ apply plugin: 'org.jetbrains.dokka'
 
 ext {
     publishedGroupId = 'tr.edu.iyte.file-picker'
+    bintrayName = 'file-picker'
     libraryName = 'FilePicker'
     artifact = 'file-picker'
 
@@ -13,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/emrsmsrli/FilePicker'
     gitUrl = 'https://github.com/emrsmsrli/FilePicker.git'
 
-    libraryVersion = '1.0.2'
+    libraryVersion = '1.0.3'
 
     developerId = 'emrsmsrli'
     developerName = 'Emre Simsirli'
@@ -29,8 +30,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0.2"
+        versionCode 2
+        versionName libraryVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

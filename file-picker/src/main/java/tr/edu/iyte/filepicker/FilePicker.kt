@@ -28,7 +28,7 @@ import java.util.*
  * A generic FilePicker class for showing all the way from root storage directories.
  * @param mode Mode for the picker to select files or folders
  * @param onFileSelectedListener A listener object for item click events
- * @see Context.filePicker
+ * @see filePicker
  */
 class FilePicker(private val context: Context,
                  private val mode: FilePickerMode = FilePickerMode.FILE_PICK,

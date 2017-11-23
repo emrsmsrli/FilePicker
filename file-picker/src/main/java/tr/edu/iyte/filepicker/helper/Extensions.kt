@@ -45,8 +45,6 @@ internal fun Context.toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH
  * @param onFileSelectedListener A listener object for item click events
  * @see FilePickerMode.FILE_PICK
  * @see FilePickerMode.FOLDER_PICK
- * @see F.filePicker
- * @see Fv4.filePicker
  */
 fun Context.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
                        onFileSelectedListener: (String) -> Unit)
@@ -58,8 +56,6 @@ fun Context.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
  * @param onFileSelectedListener A listener object for item click events
  * @see FilePickerMode.FILE_PICK
  * @see FilePickerMode.FOLDER_PICK
- * @see Context.filePicker
- * @see Fv4.filePicker
  */
 fun F.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
                         onFileSelectedListener: (String) -> Unit)
@@ -71,8 +67,6 @@ fun F.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
  * @param onFileSelectedListener A listener object for item click events
  * @see FilePickerMode.FILE_PICK
  * @see FilePickerMode.FOLDER_PICK
- * @see F.filePicker
- * @see Context.filePicker
  */
 fun Fv4.filePicker(mode: FilePickerMode = FilePickerMode.FILE_PICK,
                    onFileSelectedListener: (String) -> Unit)

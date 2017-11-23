@@ -1,6 +1,4 @@
 <resources>
-    <string name="file_picker_app_name" translatable="false">File Picker</string>
-
     <string name="file_picker_no_subdirectories">No folders or files here</string>
 
     <string name="file_picker_select_file">Select a file</string>

@@ -26,6 +26,7 @@ import java.util.*
 
 /**
  * A generic FilePicker class for showing all the way from root storage directories.
+ * @param context A context for loading resources
  * @param mode Mode for the picker to select files or folders
  * @param onFileSelectedListener A listener object for item click events
  * @see filePicker

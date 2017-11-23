@@ -47,11 +47,15 @@ class FilePicker(private val context: Context,
         storages = context.externalCacheDirs.map {
             val storageFile = File(it.path.split(reg)[0])
 
-            val name = if(!Environment.isExternalStorageRemovable(storageFile))
-                context.getString(R.string.file_picker_internal_storage)
-            else context.getString(R.string.file_picker_external_storage)
-
-            StorageFileItem(name = name, path = storageFile.path)
+            if(!Environment.isExternalStorageRemovable(storageFile)) {
+                StorageFileItem(name = context.getString(R.string.file_picker_internal_storage),
+                        path = storageFile.path,
+                        isInternal = true)
+            } else {
+                StorageFileItem(name = context.getString(R.string.file_picker_external_storage),
+                        path = storageFile.path,
+                        isInternal = false)
+            }
         }.sortedBy { it.name }
     }
 

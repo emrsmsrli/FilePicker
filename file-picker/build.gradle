@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/emrsmsrli/FilePicker'
     gitUrl = 'https://github.com/emrsmsrli/FilePicker.git'
 
-    libraryVersion = '1.0.3'
+    libraryVersion = '1.0.4'
 
     developerId = 'emrsmsrli'
     developerName = 'Emre Simsirli'
@@ -30,7 +30,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 2
+        versionCode 3
         versionName libraryVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

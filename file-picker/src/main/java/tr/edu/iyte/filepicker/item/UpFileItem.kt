@@ -2,7 +2,8 @@ package tr.edu.iyte.filepicker.item
 
 /**
  * A [FileItem] that represents files and folders
- * @param name Name of the file. Always refers to @strings.up
+ * @constructor Constructs a UpFileItem which covers Up functionality
+ * @property name Name of the file. Always refers to @strings.up
 */
 internal data class UpFileItem(override val name: String) : FileItem {
 

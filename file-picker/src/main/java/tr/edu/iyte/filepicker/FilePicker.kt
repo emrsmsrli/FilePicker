@@ -4,6 +4,11 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.*
+import android.os.Build
 import android.os.Environment
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
@@ -21,18 +26,27 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import tr.edu.iyte.filepicker.helper.*
 import tr.edu.iyte.filepicker.item.*
+import tr.edu.iyte.filepicker.style.FilePickerButtonStyle
+import tr.edu.iyte.filepicker.style.FilePickerStyle
 import java.io.File
 import java.util.*
 
 /**
  * A generic FilePicker class for showing all the way from root storage directories.
- * @param context A context for loading resources
- * @param mode Mode for the picker to select files or folders
- * @param onFileSelectedListener A listener object for item click events
+ * @constructor Constructs a FilePicker object.
+ * @property context A context for loading resources
+ * @property mode Mode for the picker to select files or folders
+ * @property style A style object for coloring the FilePicker
+ * @property onFileSelectedListener A listener object for item click events
  * @see filePicker
+ * @see FilePickerStyle.STYLE_LIGHT
+ * @see FilePickerStyle.STYLE_DARK
+ * @see FilePickerStyle.STYLE_AMOLED
+ * @see FilePicker.show
  */
 class FilePicker(private val context: Context,
                  private val mode: FilePickerMode = FilePickerMode.FILE_PICK,
+                 private val style: FilePickerStyle = FilePickerStyle.STYLE_LIGHT,
                  private val onFileSelectedListener: (String) -> Unit) : Loggable {
     private val stack = Stack<String>()
     private var path = "root"
@@ -61,13 +75,13 @@ class FilePicker(private val context: Context,
     }
 
     /**
-     * Shows the FilePicker with the given [context].
+     * Shows the FilePicker.
      * Picker starts with showing all available
      * storage devices.
      */
     @SuppressLint("InflateParams")
     fun show() {
-        pickerAdapter = FilePickerAdapter(context) onItemClick@{ file ->
+        pickerAdapter = FilePickerAdapter(context, style.itemStyle) onItemClick@{ file ->
             if(file is UpFileItem) {
                 path = stack.pop()
                 info("up, now in $path")
@@ -124,14 +138,20 @@ class FilePicker(private val context: Context,
                 .setNeutralButton(R.string.file_picker_folder_new, null)
                 .also {
                     val inflater = LayoutInflater.from(context)
+
                     val titleView = inflater.inflate(R.layout.file_picker_custom_dialog_title, null)
-                    titleView.find<TextView>(R.id.title).text =
-                            when(mode) {
-                                FilePickerMode.FILE_PICK -> context.getString(R.string.file_picker_select_file)
-                                FilePickerMode.FOLDER_PICK   -> context.getString(R.string.file_picker_select_folder)
-                            }
+                    titleView.setBackgroundColor(style.titleBackgroundColor)
+
+                    val title = titleView.find<TextView>(R.id.title)
+                    title.setTextColor(style.titleTextColor)
+                    title.text = when(mode) {
+                        FilePickerMode.FILE_PICK -> context.getString(R.string.file_picker_select_file)
+                        FilePickerMode.FOLDER_PICK   -> context.getString(R.string.file_picker_select_folder)
+                    }
+
                     subTitle = titleView.find(R.id.subtitle)
                     subTitle.text = path
+                    subTitle.setTextColor(style.titleSecondaryTextColor)
 
                     it.setCustomTitle(titleView)
 
@@ -139,9 +159,14 @@ class FilePicker(private val context: Context,
                     val recycler = customView.find<RecyclerView>(R.id.recycler)
                     recycler.layoutManager = LinearLayoutManager(context)
                     recycler.adapter = pickerAdapter
+
                     val decoration = DividerItemDecoration(context, LinearLayout.VERTICAL)
-                    decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.file_picker_line_divider))
+                    val dividerDrawable = ContextCompat.getDrawable(context, R.drawable.file_picker_line_divider)
+                    dividerDrawable.setColorFilter(style.listDividerColor, PorterDuff.Mode.SRC_IN)
+                    decoration.setDrawable(dividerDrawable)
                     recycler.addItemDecoration(decoration)
+
+                    customView.setBackgroundColor(style.listBackgroundColor)
                     it.setView(customView)
 
                     when(mode) {
@@ -170,6 +195,18 @@ class FilePicker(private val context: Context,
         newFolderButton.setOnClickListener {
             NewFolderDialog(context)
         }
+
+        val cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+
+        okButton.setTextColor(ColorStateList(
+                arrayOf(intArrayOf(-android.R.attr.state_enabled), intArrayOf()),
+                intArrayOf(style.buttonStyle.textDisabledColor, style.buttonStyle.textColor)))
+        newFolderButton.setTextColor(style.buttonStyle.textColor)
+        cancelButton?.setTextColor(style.buttonStyle.textColor)
+
+        okButton.background = newRippleBackground(style = style.buttonStyle)
+        newFolderButton.background = newRippleBackground(style = style.buttonStyle)
+        cancelButton?.background = newRippleBackground(style = style.buttonStyle)
 
         verbose("dialog init complete")
     }
@@ -227,6 +264,7 @@ class FilePicker(private val context: Context,
                     dialog.dismiss()
                 }
             }
+            // TODO implement styling for newfolderdialog
         }
     }
 
@@ -261,6 +299,20 @@ class FilePicker(private val context: Context,
 
         fun toggleEnable(b: Button, shouldEnable: Boolean) {
             b.isEnabled = shouldEnable
+        }
+
+        fun newRippleBackground(style: FilePickerButtonStyle): Drawable {
+            val bg = RippleDrawable(
+                    ColorStateList.valueOf(style.backgroundRippleColor),
+                    ColorDrawable(style.backgroundColor),
+                    InsetDrawable(GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(Color.WHITE , Color.WHITE)),
+                            12, 18, 12, 18)
+            )
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                bg.setPadding(36, 30, 36, 30)
+
+            return bg
         }
     }
 }

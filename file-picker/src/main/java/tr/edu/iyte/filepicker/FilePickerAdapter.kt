@@ -1,6 +1,7 @@
 package tr.edu.iyte.filepicker
 
 import android.content.Context
+import android.graphics.PorterDuff
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +10,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import tr.edu.iyte.filepicker.helper.find
 import tr.edu.iyte.filepicker.item.*
+import tr.edu.iyte.filepicker.style.FilePickerItemStyle
 
 internal class FilePickerAdapter(private val context: Context,
+                                 private val style: FilePickerItemStyle,
                                  private val notifyOnChange: Boolean = true,
                                  private val onItemClick: (FileItem) -> Unit) :
         RecyclerView.Adapter<FilePickerAdapter.ViewHolder>() {
-    open inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val img = v.find<ImageView>(R.id.icon)
-        val fileName = v.find<TextView>(R.id.name)
+    open inner class ViewHolder(val background: View) : RecyclerView.ViewHolder(background) {
+        val img = background.find<ImageView>(R.id.icon)
+        val fileName = background.find<TextView>(R.id.name)
     }
 
     inner class ViewHolderS(v: View) : ViewHolder(v) {
@@ -39,7 +42,11 @@ internal class FilePickerAdapter(private val context: Context,
         val item = files[position]
         if(holder is ViewHolderS) {
             holder.path.text = (item as StorageFileItem).path
+            holder.path.setTextColor(style.secondaryTextColor)
         }
+
+        holder.background.setBackgroundColor(style.backgroundColor)
+        // TODO implement background ripple generation
 
         holder.img.setImageDrawable(context.getDrawable(
                 when {
@@ -53,8 +60,10 @@ internal class FilePickerAdapter(private val context: Context,
                     item.isDirectory        -> R.drawable.file_picker_ic_folder_black_24dp
                     else                    -> R.drawable.file_picker_ic_file_black_24dp
                 }))
+        holder.img.setColorFilter(style.drawableTintColor, PorterDuff.Mode.SRC_IN)
 
         holder.fileName.text = item.name
+        holder.fileName.setTextColor(style.textColor)
         holder.itemView.setOnClickListener {
             onItemClick(files[holder.adapterPosition])
         }
